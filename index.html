@@ -28,7 +28,7 @@ svg {
 }
 
 .team-layer {
-    transition:height 1s ease;
+    transition:height 1s ease, y 1s ease;
 }
 
 .info {
@@ -187,15 +187,19 @@ function parseCSV(text){
     teams = newTeams;
 }
 
-const letterTop = 54;
-const letterBottom = 345;
+// Viršutinė ir apatinė užpildymo ribos (pikseliais pagal SVG viewBox)
+const letterTop = 50;
+const letterBottom = 356; // Pakeista iš 345 į 356 (pilnas aukštis iki pačios apacios)
 const letterHeight = letterBottom - letterTop;
 
 function render(){
     const total = teams.reduce((sum,t)=>sum+t.score,0);
     const progress = Math.max(0, Math.min(1, total / max));
-    const MIN_VISIBLE_HEIGHT = 15;
+    
+    // Minimalus užpildo aukštis, kad atsiradus taškams iškart pilnai užsidengtų apatinis kampukas
+    const MIN_VISIBLE_HEIGHT = 25; 
     let height = progress * letterHeight;
+    
     if (total > 0 && height < MIN_VISIBLE_HEIGHT) {
         height = MIN_VISIBLE_HEIGHT;
     }
