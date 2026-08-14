@@ -25,6 +25,7 @@ body {
 svg {
     width:420px;
     height:428px;
+    flex-shrink:0;
 }
 
 .team-layer {
@@ -32,7 +33,8 @@ svg {
 }
 
 .info {
-    width:380px;
+    /* Nuimtas fiksuotas plotis, kad tilptų keli stulpeliai */
+    min-width:380px;
 }
 
 .info-panel {
@@ -52,19 +54,28 @@ svg {
     color:#fff;
 }
 
+/* Stulpelių išdėstymas: kas 6 komandas keliasi į naują stulpelį */
+#teamRows {
+    display: grid;
+    grid-template-rows: repeat(6, auto);
+    grid-auto-flow: column;
+    gap: 12px 20px; /* 12px tarp eilučių, 20px tarp stulpelių */
+}
+
 .team {
     display:flex;
     align-items:center;
     justify-content:space-between;
     border-radius:30px;
     padding:12px 22px;
-    margin:12px 0;
+    margin:0; /* Tarpus dabar reguliuoja grid gap */
     font-size:18px;
     font-weight:700;
     text-transform:uppercase;
     letter-spacing:0.5px;
     color:#fff;
     text-shadow:0 1px 2px rgba(0,0,0,0.4);
+    min-width: 280px; /* Užtikrina vienodą stulpelių plotį */
 }
 
 .team .score {
@@ -189,14 +200,13 @@ function parseCSV(text){
 
 // Viršutinė ir apatinė užpildymo ribos (pikseliais pagal SVG viewBox)
 const letterTop = 50;
-const letterBottom = 356; // Pakeista iš 345 į 356 (pilnas aukštis iki pačios apacios)
+const letterBottom = 356;
 const letterHeight = letterBottom - letterTop;
 
 function render(){
     const total = teams.reduce((sum,t)=>sum+t.score,0);
     const progress = Math.max(0, Math.min(1, total / max));
     
-    // Minimalus užpildo aukštis, kad atsiradus taškams iškart pilnai užsidengtų apatinis kampukas
     const MIN_VISIBLE_HEIGHT = 25; 
     let height = progress * letterHeight;
     
