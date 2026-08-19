@@ -222,7 +222,7 @@ function render(){
     rowsContainer.innerHTML = teams.map((team, i) => `
         <div class="team team-color-${i % 6}">
             <span>${team.name}</span>
-            <span><span class="score">${team.score}</span><span class="pts">TAŠKAI</span></span>
+            <span><span class="score">${team.score}</span><span class="pts"></span></span>
         </div>
     `).join("");
 
