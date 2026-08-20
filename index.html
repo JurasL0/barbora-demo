@@ -33,7 +33,6 @@ svg {
 }
 
 .info {
-    /* Nuimtas fiksuotas plotis, kad tilptų keli stulpeliai */
     min-width:380px;
 }
 
@@ -54,12 +53,11 @@ svg {
     color:#fff;
 }
 
-/* Stulpelių išdėstymas: kas 6 komandas keliasi į naują stulpelį */
 #teamRows {
     display: grid;
-    grid-template-rows: repeat(12, auto);
+    grid-template-rows: repeat(6, auto);
     grid-auto-flow: column;
-    gap: 12px 20px; /* 12px tarp eilučių, 20px tarp stulpelių */
+    gap: 12px 20px;
 }
 
 .team {
@@ -68,14 +66,14 @@ svg {
     justify-content:space-between;
     border-radius:30px;
     padding:12px 22px;
-    margin:0; /* Tarpus dabar reguliuoja grid gap */
+    margin:0;
     font-size:18px;
     font-weight:700;
     text-transform:uppercase;
     letter-spacing:0.5px;
     color:#fff;
     text-shadow:0 1px 2px rgba(0,0,0,0.4);
-    min-width: 280px; /* Užtikrina vienodą stulpelių plotį */
+    min-width: 280px;
 }
 
 .team .score {
@@ -89,20 +87,6 @@ svg {
     opacity:0.85;
     margin-left:4px;
 }
-
-/* 12 unikalių vientisų (solid) spalvų */
-.team-color-0  { background: #872E2C; } /* 1 */
-.team-color-1  { background: #4C2C67; } /* 2 */
-.team-color-2  { background: #363679; } /* 3 */
-.team-color-3  { background: #2F566D; } /* 4 */
-.team-color-4  { background: #2F5E40; } /* 5 */
-.team-color-5  { background: #865B34; } /* 6 */
-.team-color-6  { background: #B0CE86; } /* 7 */
-.team-color-7  { background: #9278A3; } /* 8 */
-.team-color-8  { background: #F6E176; } /* 9 */
-.team-color-9  { background: #2F566D; } /* 10 */
-.team-color-10 { background: #DB8A87; } /* 11 */
-.team-color-11 { background: #B6BDD3; } /* 12 */
 
 .total-row {
     border-top:1px solid #2a3158;
@@ -175,6 +159,22 @@ VISO: <span id="total">0</span> / <span id="maxVal">200</span>
 const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/1g7IucsjigydaPQk28BebMXQKmIyfvlZiK_xRp6rade0/gviz/tq?tqx=out:csv&gid=0";
 const POLL_INTERVAL_MS = 5000;
 
+// 12 visiškai skirtingų vientisų spalvų masyvas
+const TEAM_COLORS = [
+    "#872E2C", // 1. Raudona
+    "#4C2C67", // 2. Žalia
+    "#363679", // 3. Mėlyna
+    "#2F566D", // 4. Gintarinė / Geltona
+    "#2F5E40", // 5. Violetinė
+    "#865B34", // 6. Turkio
+    "#B0CE86", // 7. Oranžinė
+    "#9278A3", // 8. Rožinė
+    "#F6E176", // 9. Šviesiai žalia (Lime)
+    "#2F566D", // 10. Indigo
+    "#DB8A87", // 11. Smaragdinė
+    "#B6BDD3"  // 12. Fuchsia (Aštri violetinė)
+];
+
 let teams = [];
 let max = 200;
 
@@ -205,7 +205,6 @@ function parseCSV(text){
     teams = newTeams;
 }
 
-// Viršutinė ir apatinė užpildymo ribos (pikseliais pagal SVG viewBox)
 const letterTop = 50;
 const letterBottom = 356;
 const letterHeight = letterBottom - letterTop;
@@ -226,12 +225,15 @@ function render(){
     fillRect.setAttribute("height", height);
 
     const rowsContainer = document.getElementById("teamRows");
-    rowsContainer.innerHTML = teams.map((team, i) => `
-        <div class="team team-color-${i % 6}">
-            <span>${team.name}</span>
-            <span><span class="score">${team.score}</span><span class="pts"></span></span>
-        </div>
-    `).join("");
+    rowsContainer.innerHTML = teams.map((team, i) => {
+        const color = TEAM_COLORS[i % TEAM_COLORS.length];
+        return `
+            <div class="team" style="background: ${color};">
+                <span>${team.name}</span>
+                <span><span class="score">${team.score}</span><span class="pts">TAŠKAI</span></span>
+            </div>
+        `;
+    }).join("");
 
     document.getElementById("total").innerHTML = total;
     document.getElementById("maxVal").innerHTML = max;
