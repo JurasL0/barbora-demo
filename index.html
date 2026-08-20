@@ -210,6 +210,14 @@ const letterTop = 50;
 const letterBottom = 356;
 const letterHeight = letterBottom - letterTop;
 
+function getPtsWord(num) {
+    const n = Math.abs(Math.round(num));
+    if (n % 100 >= 11 && n % 100 <= 19) return "TAŠKŲ";
+    if (n % 10 === 1) return "TAŠKAS";
+    if (n % 10 >= 2 && n % 10 <= 9) return "TAŠKAI";
+    return "TAŠKŲ";
+}
+
 function render(){
     const total = teams.reduce((sum,t)=>sum+t.score,0);
     const progress = Math.max(0, Math.min(1, total / max));
@@ -231,7 +239,7 @@ function render(){
         return `
             <div class="team" style="background: ${color};">
                 <span>${team.name}</span>
-                <span><span class="score">${team.score}</span><span class="pts">TAŠKAI</span></span>
+                <span><span class="score">${team.score}</span><span class="pts">${getPtsWord(team.score)}</span></span>
             </div>
         `;
     }).join("");
