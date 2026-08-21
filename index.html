@@ -265,6 +265,27 @@ async function refresh(){
 render();
 refresh();
 setInterval(refresh, POLL_INTERVAL_MS);
+
+// Pilno ekrano (Fullscreen) perjungimo funkcija
+function toggleFullscreen() {
+    if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(err => {
+            console.error(`Klaida jungiant pilną ekraną: ${err.message}`);
+        });
+    } else {
+        if (document.exitFullscreen) {
+            document.exitFullscreen();
+        }
+    }
+}
+
+// Įgaliname du kartus spustelėjus pele arba paspaudus raidę 'F'
+document.addEventListener("dblclick", toggleFullscreen);
+document.addEventListener("keydown", (e) => {
+    if (e.key === "f" || e.key === "F") {
+        toggleFullscreen();
+    }
+});
 </script>
 
 </body>
